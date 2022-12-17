@@ -21,3 +21,11 @@ model Categories {
   name  String  @db.VarChar(150)
   color String? @db.VarChar(8)
 }
+
+model Transitions {
+  id        String   @id @default(uuid())
+  reference String?  @db.VarChar(255)
+  amount    Float
+  currency  String   @db.VarChar(6)
+  date      DateTime
+}
