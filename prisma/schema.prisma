@@ -15,3 +15,9 @@ model Accounts {
   name String @db.VarChar(150)
   bank String @db.VarChar(150)
 }
+
+model Categories {
+  id    String  @id @default(uuid())
+  name  String  @db.VarChar(150)
+  color String? @db.VarChar(8)
+}
