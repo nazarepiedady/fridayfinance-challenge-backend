@@ -10,22 +10,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Accounts {
-  id   String @id @default(uuid())
-  name String @db.VarChar(150)
-  bank String @db.VarChar(150)
+model Account {
+  id          String       @id @default(uuid())
+  name        String       @db.VarChar(150)
+  bank        String       @db.VarChar(150)
+  transitions Transition[]
 }
 
-model Categories {
-  id    String  @id @default(uuid())
-  name  String  @db.VarChar(150)
-  color String? @db.VarChar(8)
+model Category {
+  id          String       @id @default(uuid())
+  name        String       @db.VarChar(150)
+  color       String?      @db.VarChar(8)
+  transitions Transition[]
 }
 
-model Transitions {
-  id        String   @id @default(uuid())
-  reference String?  @db.VarChar(255)
-  amount    Float
-  currency  String   @db.VarChar(6)
-  date      DateTime
+model Transition {
+  id         String   @id @default(uuid())
+  accountId  String
+  categoryId String
+  reference  String?  @db.VarChar(255)
+  amount     Float
+  currency   String   @db.VarChar(6)
+  date       DateTime
+  account    Account  @relation(fields: [accountId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
 }
