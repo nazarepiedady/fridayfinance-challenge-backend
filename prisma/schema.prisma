@@ -11,20 +11,20 @@ datasource db {
 }
 
 model Account {
-  id          String       @id @default(uuid())
-  name        String       @db.VarChar(150)
-  bank        String       @db.VarChar(150)
-  transitions Transition[]
+  id           String        @id @default(uuid())
+  name         String        @db.VarChar(150)
+  bank         String        @db.VarChar(150)
+  transactions Transaction[]
 }
 
 model Category {
-  id          String       @id @default(uuid())
-  name        String       @db.VarChar(150)
-  color       String?      @db.VarChar(8)
-  transitions Transition[]
+  id           String        @id @default(uuid())
+  name         String        @db.VarChar(150)
+  color        String?       @db.VarChar(8)
+  transactions Transaction[]
 }
 
-model Transition {
+model Transaction {
   id         String   @id @default(uuid())
   accountId  String
   categoryId String
