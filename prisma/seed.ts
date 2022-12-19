@@ -1,7 +1,7 @@
 const fileSystem = require('fs')
 const CSVParser = require('csv-parser')
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Account, Category, Transaction } from '@prisma/client'
 const prisma = new PrismaClient()
 
 function getFilePath(filename: string): string {
@@ -9,31 +9,23 @@ function getFilePath(filename: string): string {
 }
 
 type FileOptions = {
-  filename: string,
-  fileOptions: {
-    skipLines: number,
-    headers: string[] | boolean,
-  }
+  skipLines: number,
+  headers: string[] | boolean,
 }
 
-function readCSVFileStream(fileOptions: FileOptions) {
-  let contents = []
+function getAccounts(): Promise<Account[]> {
+  let accounts: Account[] = []
+  let filename: string = 'accounts.csv'
+  let fileOptions: FileOptions = { skipLines: 1, headers: ['id', 'name', 'bank'] }
+
   return new Promise((resolve, reject) => {
     fileSystem
-      .createReadStream(getFilePath(fileOptions.filename))
-      .pipe(CSVParser(fileOptions.fileOptions))
-      .on('data', (content) => contents.push(content))
-      .on('end', () => { resolve(contents) })
+      .createReadStream(getFilePath(filename))
+      .pipe(CSVParser(fileOptions))
+      .on('data', (account: Account) => accounts.push(account))
+      .on('end', () => { resolve(accounts) })
       .on('error', (error: Error) => reject(error))
   })
-}
-
-function getAccounts() {
-  let options = {
-    filename: 'accounts.csv',
-    fileOptions: { skipLines: 1, headers: ['id', 'name', 'bank'] }
-  }
-  return readCSVFileStream(options)
 }
 
 function getCategories() {
