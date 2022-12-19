@@ -17,7 +17,7 @@
   {
     "id": "977a3d02-364d-4c88-9856-85cd93a361ef",
     "name": "Company Investments",
-    "color": 9.58e+82
+    "color": "958e80"
   },
   {
     "id": "350a5a32-beee-47f3-bb71-3814d4a7082a",
@@ -32,12 +32,12 @@
   {
     "id": "49b11f13-8eb6-417d-aa02-467d1686c003",
     "name": "Debt Investment",
-    "color": 9.58e+82
+    "color": "958e80"
   },
   {
     "id": "b61354fc-c493-46fe-8edd-87da4f503965",
     "name": "Debt Repayment",
-    "color": 9.58e+82
+    "color": "958e80"
   },
   {
     "id": "ca9d3311-7446-4615-b071-5fe05f4e1be9",
@@ -47,17 +47,17 @@
   {
     "id": "0bc45cf5-6dc7-4cfb-bae4-b740816862ac",
     "name": "Equity investment",
-    "color": 9.58e+82
+    "color": "958e80"
   },
   {
     "id": "3e384a41-01f2-4978-b10e-73dba7cb6878",
     "name": "Financing Expense",
-    "color": 9.58e+82
+    "color": "958e80"
   },
   {
     "id": "e9641f65-f89a-4278-b490-4f2c4fa6e2f7",
     "name": "Financing Income",
-    "color": 9.58e+82
+    "color": "958e80"
   },
   {
     "id": "e4cb1102-1e2d-407e-b986-a7f14a7f0835",
