@@ -12,26 +12,26 @@ datasource db {
 
 model Account {
   id           String        @id @default(uuid())
-  name         String        @db.VarChar(150)
-  bank         String        @db.VarChar(150)
+  name         String        @db.VarChar(255)
+  bank         String        @db.VarChar(255)
   transactions Transaction[]
 }
 
 model Category {
   id           String        @id @default(uuid())
-  name         String        @db.VarChar(150)
+  name         String        @unique @db.VarChar(255)
   color        String?       @db.VarChar(8)
   transactions Transaction[]
 }
 
 model Transaction {
   id         String    @id @default(uuid())
-  accountId  String?
+  accountId  String
   categoryId String?
   reference  String?   @db.VarChar(255)
   amount     Float
   currency   String    @db.VarChar(6)
-  date       DateTime
-  account    Account?  @relation(fields: [accountId], references: [id])
+  date       DateTime  @default(now())
+  account    Account   @relation(fields: [accountId], references: [id])
   category   Category? @relation(fields: [categoryId], references: [id])
 }
