@@ -36,6 +36,14 @@ function getAccounts() {
   return readCSVFileStream(options)
 }
 
+function getCategories() {
+  let options = {
+    filename: 'categories.csv',
+    fileOptions: { skipLines: 1, headers: ['id', 'name', 'color'] }
+  }
+  return readCSVFileStream(options)
+}
+
 async function main() {
 }
 
