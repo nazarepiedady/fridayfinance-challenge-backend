@@ -43,6 +43,24 @@ function getCategories(): Promise<Category[]> {
   })
 }
 
+function getTransactions(): Promise<Transaction[]> {
+  let transactions: Transaction[] = []
+  let filename: string = 'categories.csv'
+  let fileOptions: FileOptions = {
+    skipLines: 1,
+    headers: ['id', 'accountId', 'categoryId', 'reference', 'amount', 'currency', 'date']
+  }
+
+  return new Promise((resolve, reject) => {
+    fileSystem
+      .createReadStream(getFilePath(filename))
+      .pipe(CSVParser(fileOptions))
+      .on('data', (transaction: Transaction) => transactions.push(transaction))
+      .on('end', () => { resolve(transactions) })
+      .on('error', (error: Error) => reject(error))
+  })
+}
+
 async function main() {
 }
 
