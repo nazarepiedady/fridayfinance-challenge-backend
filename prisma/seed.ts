@@ -1,41 +1,41 @@
-import { readFileSync } from 'fs'
+const fileSystem = require('fs')
+const CSVParser = require('csv-parser')
 
-type Account = {
-  id: string,
-  name: string,
-  bank: string,
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+
+function getFilePath(filename: string): string {
+  return `./seeds/${filename}`
 }
 
-function getAccounts(): Account[] {
-  let filePath = '../seeds/accounts.json'
-  let accounts = readFileSync(filePath, { encoding: 'utf-8', flag: 'r' })
-  return JSON.parse(accounts)
+type FileOptions = {
+  filename: string,
+  fileOptions: {
+    skipLines: number,
+    headers: string[] | boolean,
+  }
 }
 
-type Category = {
-  id: string,
-  name: string,
-  color: string
+function readCSVFileStream(fileOptions: FileOptions) {
+  let contents = []
+  return new Promise((resolve, reject) => {
+    fileSystem
+      .createReadStream(getFilePath(fileOptions.filename))
+      .pipe(CSVParser(fileOptions.fileOptions))
+      .on('data', (content) => contents.push(content))
+      .on('end', () => { resolve(contents) })
+      .on('error', (error: Error) => reject(error))
+  })
 }
 
-function getCategories(): Category[] {
-  let filePath = '../seeds/categories.json'
-  let categories = readFileSync(filePath, { encoding: 'utf-8', flag: 'r' })
-  return JSON.parse(categories)
+async function main() {
 }
 
-type Transaction = {
-  id: string,
-  accountId: string,
-  categoryId: string,
-  reference: string,
-  amount: number,
-  currency: string,
-  date: string
-}
-
-function getTransactions(): Transaction[] {
-  let filePath = '../seeds/transactions.json'
-  let transactions = readFileSync(filePath, { encoding: 'utf-8', flag: 'r' })
-  return JSON.parse(transactions)
-}
+main()
+  .catch((error) => {
+    console.error(error)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
