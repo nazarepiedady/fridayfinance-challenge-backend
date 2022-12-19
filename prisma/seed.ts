@@ -28,12 +28,19 @@ function getAccounts(): Promise<Account[]> {
   })
 }
 
-function getCategories() {
-  let options = {
-    filename: 'categories.csv',
-    fileOptions: { skipLines: 1, headers: ['id', 'name', 'color'] }
-  }
-  return readCSVFileStream(options)
+function getCategories(): Promise<Category[]> {
+  let categories: Category[] = []
+  let filename: string = 'categories.csv'
+  let fileOptions: FileOptions = { skipLines: 1, headers: ['id', 'name', 'color'] }
+
+  return new Promise((resolve, reject) => {
+    fileSystem
+      .createReadStream(getFilePath(filename))
+      .pipe(CSVParser(fileOptions))
+      .on('data', (category: Category) => categories.push(category))
+      .on('end', () => { resolve(categories) })
+      .on('error', (error: Error) => reject(error))
+  })
 }
 
 async function main() {
