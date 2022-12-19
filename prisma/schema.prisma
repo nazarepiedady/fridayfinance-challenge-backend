@@ -25,13 +25,13 @@ model Category {
 }
 
 model Transaction {
-  id         String   @id @default(uuid())
-  accountId  String
-  categoryId String
-  reference  String?  @db.VarChar(255)
+  id         String    @id @default(uuid())
+  accountId  String?
+  categoryId String?
+  reference  String?   @db.VarChar(255)
   amount     Float
-  currency   String   @db.VarChar(6)
+  currency   String    @db.VarChar(6)
   date       DateTime
-  account    Account  @relation(fields: [accountId], references: [id])
-  category   Category @relation(fields: [categoryId], references: [id])
+  account    Account?  @relation(fields: [accountId], references: [id])
+  category   Category? @relation(fields: [categoryId], references: [id])
 }
