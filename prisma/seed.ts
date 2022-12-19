@@ -28,6 +28,14 @@ function readCSVFileStream(fileOptions: FileOptions) {
   })
 }
 
+function getAccounts() {
+  let options = {
+    filename: 'accounts.csv',
+    fileOptions: { skipLines: 1, headers: ['id', 'name', 'bank'] }
+  }
+  return readCSVFileStream(options)
+}
+
 async function main() {
 }
 
