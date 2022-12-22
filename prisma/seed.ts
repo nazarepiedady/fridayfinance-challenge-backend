@@ -38,15 +38,13 @@ function getAccounts(): Promise<Account[]> {
 function getCategories(): Promise<Category[]> {
   let categories: Category[] = []
   let filename: string = 'categories.csv'
-  let fileOptions: FileOptions = { skipLines: 1, headers: ['id', 'name', 'color'] }
 
   return new Promise((resolve, reject) => {
-    fileSystem
-      .createReadStream(getFilePath(filename))
-      //.pipe(CSVParser(fileOptions))
-      .on('error', (error: Error) => reject(error))
-      .on('data', (category: Category) => categories.push(category))
-      .on('end', () => { resolve(categories) })
+    const categoriesFromFile = fileSystem.createReadStream(getFilePath(filename))
+    CSVParserStream(categoriesFromFile, { headers: true })
+      .on('error', (error: Error) => { reject(error) })
+      .on('data', (category: Category) => { categories.push(category) })
+      .on('end', () => resolve(categories))
   })
 }
 
