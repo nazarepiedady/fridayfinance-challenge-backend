@@ -58,23 +58,18 @@ function getTransactions(): Promise<Transaction[]> {
 }
 
 async function main() {
-  /* const accounts = await getAccounts()
-  console.log(accounts) */
+  const accounts: Account[] = await getAccounts()
+  const categories: Category[] = await getCategories()
+  const transactions: Transaction[] = await getTransactions()
 
-  /* const categories = await getCategories()
-  console.log(categories) */
+  await prisma.account.deleteMany()
+  await prisma.account.createMany({ data: accounts })
 
-  /* const transactions = await getTransactions()
-  console.log(transactions) */
+  await prisma.category.deleteMany()
+  await prisma.category.createMany({ data: categories })
 
-  /* await prisma.account.deleteMany()
-  await prisma.account.createMany({ data: accounts }) */
-
-  /* await prisma.category.deleteMany()
-  await prisma.category.createMany({ data: categories }) */
-
-  //await prisma.transaction.deleteMany()
-  //await prisma.transaction.createMany({ data: transactions })
+  await prisma.transaction.deleteMany()
+  await prisma.transaction.createMany({ data: transactions })
 }
 
 main()
