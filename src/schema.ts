@@ -72,11 +72,11 @@ export const resolvers = {
     getTransactions: (
       _parent: undefined,
       _args: {
-        ascOrder?: boolean
-        skip?: number
-        take?: number
-        selectedBank?: string
-        selectedAccount?: string
+        ascOrder?: boolean,
+        skip?: number,
+        take?: number,
+        selectedBank?: string,
+        selectedAccount?: string,
       },
       context: Context
     ) => {
