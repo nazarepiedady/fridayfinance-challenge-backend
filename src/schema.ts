@@ -39,6 +39,10 @@ export const typeDefinitions = gql`
       ascOrder: Boolean, skip: Int, take: Int, selectedBank: String, selectedAccount: String!
     ): [Transaction]
   }
+
+  type Mutation {
+    updateTransactionCategory(categoryId: String!, transactionId: String!): Transaction
+  }
 `
 
 export const resolvers = {
@@ -87,6 +91,19 @@ export const resolvers = {
         orderBy: { date: ascedentOrder ? 'asc' : 'desc' },
         include: { account: true, category: true },
         where: { account: { name: selectedAccount, bank: selectedBank } }
+      })
+    }
+  },
+  Mutation: {
+    updateTransactionCategory: (
+      _parent: undefined,
+      _args: { categoryId: string, transactionId: string },
+      context: Context
+    ) => {
+      return context.prisma.transaction.update({
+        where: { id: _args.transactionId },
+        data: { categoryId: _args.categoryId },
+        include: { category: true, account: true }
       })
     }
   }
