@@ -10,4 +10,11 @@ export const typeDefinitions = gql`
     bank: String!
     transactions: [Transaction]
   }
+
+  type Category {
+    id: String!
+    name: String!
+    color: String
+    transactions: [Transaction]
+  }
 `
