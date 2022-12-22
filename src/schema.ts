@@ -17,4 +17,16 @@ export const typeDefinitions = gql`
     color: String
     transactions: [Transaction]
   }
+
+  type Transaction {
+    id: String!
+    accountId: String!
+    categoryId: String!
+    reference: String!
+    amount: Float!
+    currency: String!
+    date: String!
+    account: Account!
+    category: Category!
+  }
 `
