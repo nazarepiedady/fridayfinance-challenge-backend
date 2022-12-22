@@ -1,6 +1,6 @@
-import { gql } from 'apollo-server';
-import { v4 as UUIDV4 } from 'uuid';
 import { Context } from './context';
+import { gql } from 'apollo-server';
+import { v4 as generateUniqueId } from 'uuid';
 
 
 export const typeDefinitions = gql`
@@ -42,6 +42,7 @@ export const typeDefinitions = gql`
 
   type Mutation {
     updateTransactionCategory(categoryId: String!, transactionId: String!): Transaction
+    addNewTransactionCategory(categoryName: String!, transactionId: String!): Transaction
   }
 `
 
@@ -103,6 +104,24 @@ export const resolvers = {
       return context.prisma.transaction.update({
         where: { id: _args.transactionId },
         data: { categoryId: _args.categoryId },
+        include: { category: true, account: true }
+      })
+    },
+    addNewTransactionCategory: async (
+      _parent: undefined,
+      _args: { categoryName: string, transactionId: string },
+      context: Context
+    ) => {
+      let randomColor = require('randomcolor')
+      let color = randomColor().substring(1)
+      const category = await context.prisma.category.upsert({
+        where: { name: _args.categoryName }, update: {},
+        create: { name: _args.categoryName, id: generateUniqueId(), color }
+      })
+
+      return await context.prisma.transaction.update({
+        where: { id: _args.transactionId },
+        data: { categoryId: category.id },
         include: { category: true, account: true }
       })
     }
