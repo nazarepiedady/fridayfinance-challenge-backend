@@ -34,3 +34,14 @@ export const typeDefinitions = gql`
     getTransactionById(id: String!): Transaction
   }
 `
+
+export const resolvers = {
+  Query: {
+    getTransactionById: (_parent: undefined, args: { id: string }, context: Context) => {
+      return context.prisma.transaction.findUnique({
+        where: { id: args.id },
+        include: { account: true, category: true }
+      })
+    }
+  }
+}
