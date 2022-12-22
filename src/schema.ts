@@ -35,6 +35,9 @@ export const typeDefinitions = gql`
     getCategories: [Category]
     getBanks: [Account]
     getAccounts: [Account]
+    getTransactions(
+      ascOrder: Boolean, skip: Int, take: Int, selectedBank: String, selectedAccount: String!
+    ): [Transaction]
   }
 `
 
@@ -59,6 +62,31 @@ export const resolvers = {
       return context.prisma.account.findMany({
         distinct: ['name'],
         select: { name: true }
+      })
+    },
+    getTransactions: (
+      _parent: undefined,
+      _args: {
+        ascOrder?: boolean
+        skip?: number
+        take?: number
+        selectedBank?: string
+        selectedAccount?: string
+      },
+      context: Context
+    ) => {
+      const ascedentOrder = _args.ascOrder || false
+      const skip = _args.skip || 0
+      const take = _args.take || 20
+      const selectedBank = _args.selectedBank || undefined
+      const selectedAccount = _args.selectedAccount || undefined
+
+      return context.prisma.transaction.findMany({
+        take,
+        skip,
+        orderBy: { date: ascedentOrder ? 'asc' : 'desc' },
+        include: { account: true, category: true },
+        where: { account: { name: selectedAccount, bank: selectedBank } }
       })
     }
   }
