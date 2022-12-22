@@ -32,6 +32,7 @@ export const typeDefinitions = gql`
 
   type Query {
     getTransactionById(id: String!): Transaction
+    getCategories: [Category]
   }
 `
 
@@ -42,6 +43,9 @@ export const resolvers = {
         where: { id: args.id },
         include: { account: true, category: true }
       })
+    },
+    getCategories: (_parent: undefined, _args: undefined, context: Context) => {
+      return context.prisma.category.findMany()
     }
   }
 }
