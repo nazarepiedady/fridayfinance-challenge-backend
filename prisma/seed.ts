@@ -48,49 +48,51 @@ function getCategories(): Promise<Category[]> {
       .on('data', (category: Category) => categories.push(category))
       .on('end', () => { resolve(categories) })
   })
+}
 
-  function getTransactions(): Promise<Transaction[]> {
-    let transactions: Transaction[] = []
-    let filename: string = 'transactions.csv'
+function getTransactions(): Promise<Transaction[]> {
+  let transactions: Transaction[] = []
+  let filename: string = 'transactions.csv'
 
-    return new Promise((resolve, reject) => {
-      const transactionsFile = fileSystem.createReadStream(getFilePath(filename))
-      CSVParserStream(transactionsFile, { headers: true })
-        .on('error', (error: Error) => reject(error))
-        .on('data', (transaction: Transaction) => {
-          let amount = parseFloat(transaction.amount.toString())
-          let date = new Date(transaction.date)
-          let categoryId = transaction.categoryId ? transaction.categoryId : null
-          transactions.push({ ...transaction, categoryId, date, amount })
-        })
-        .on('end', () => {
-          transactions = transactions.slice(1, 501) // TODO: only for dev env
-          resolve(transactions)
-        })
-    })
-  }
+  return new Promise((resolve, reject) => {
+    const transactionsFile = fileSystem.createReadStream(getFilePath(filename))
+    CSVParserStream(transactionsFile, { headers: true })
+      .on('error', (error: Error) => reject(error))
+      .on('data', (transaction: Transaction) => {
+        let amount = parseFloat(transaction.amount.toString())
+        let date = new Date(transaction.date)
+        let categoryId = transaction.categoryId ? transaction.categoryId : null
+        transactions.push({ ...transaction, categoryId, date, amount })
+      })
+      .on('end', () => {
+        transactions = transactions.slice(1, 501) // TODO: only for dev env
+        resolve(transactions)
+      })
+  })
 
-  async function main() {
-    /* const accounts = await getAccounts() */
-    /* const categories = await getCategories() */
-    const transactions = await getTransactions()
-    console.log(transactions)
+}
 
-    /* await prisma.account.deleteMany()
-    await prisma.account.createMany({ data: accounts }) */
+async function main() {
+  /* const accounts = await getAccounts() */
+  /* const categories = await getCategories() */
+  const transactions = await getTransactions()
+  console.log(transactions)
 
-    /* await prisma.category.deleteMany()
-    await prisma.category.createMany({ data: categories }) */
+  /* await prisma.account.deleteMany()
+  await prisma.account.createMany({ data: accounts }) */
 
-    //await prisma.transaction.deleteMany()
-    //await prisma.transaction.createMany({ data: transactions })
-  }
+  /* await prisma.category.deleteMany()
+  await prisma.category.createMany({ data: categories }) */
 
-  main()
-    .catch((error) => {
-      console.error(error)
-      process.exit(1)
-    })
-    .finally(async () => {
-      await prisma.$disconnect()
-    })
+  //await prisma.transaction.deleteMany()
+  //await prisma.transaction.createMany({ data: transactions })
+}
+
+main()
+  .catch((error) => {
+    console.error(error)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })
