@@ -33,6 +33,7 @@ export const typeDefinitions = gql`
   type Query {
     getTransactionById(id: String!): Transaction
     getCategories: [Category]
+    getBanks: [Account]
   }
 `
 
@@ -46,6 +47,12 @@ export const resolvers = {
     },
     getCategories: (_parent: undefined, _args: undefined, context: Context) => {
       return context.prisma.category.findMany()
+    },
+    getBanks: (_parent: undefined, _args: undefined, context: Context) => {
+      return context.prisma.account.findMany({
+        distinct: ['bank'],
+        select: { bank: true }
+      })
     }
   }
 }
