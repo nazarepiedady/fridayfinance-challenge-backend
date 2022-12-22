@@ -21,7 +21,9 @@
     "@prisma/client": "^4.7.1",
     "apollo-server": "^3.11.1",
     "fast-csv": "^4.3.6",
-    "graphql": "^16.6.0"
+    "generate-random-color": "^1.0.6",
+    "graphql": "^16.6.0",
+    "randomcolor": "^0.6.2"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
