@@ -29,4 +29,8 @@ export const typeDefinitions = gql`
     account: Account!
     category: Category!
   }
+
+  type Query {
+    getTransactionById(id: String!): Transaction
+  }
 `
