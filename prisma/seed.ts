@@ -1,37 +1,24 @@
 const fileSystem = require('fs')
-//const CSVParser = require('csv-parser')
 import { parseStream as CSVParserStream } from 'fast-csv'
-
 import { PrismaClient, Account, Category, Transaction } from '@prisma/client'
+
+
 const prisma = new PrismaClient()
 
 function getFilePath(filename: string): string {
   return `./seeds/${filename}`
 }
 
-type FileOptions = {
-  skipLines: number,
-  headers: string[] | boolean,
-}
-
 function getAccounts(): Promise<Account[]> {
   let accounts: Account[] = []
   let filename: string = 'accounts.csv'
-  let fileOptions: FileOptions = { skipLines: 1, headers: ['id', 'name', 'bank'] }
 
   return new Promise((resolve, reject) => {
-    const accountsFile = fileSystem.createReadStream(getFilePath(filename))
-    CSVParserStream(accountsFile)
-      .on('error', (error: Error) => reject(error))
-      .on('data', (account: Account) => { accounts.push(account) })
-      .on('end', (accountCount: number) =>
-        console.log(`Parsed ${accountCount} rows`))
-    /* fileSystem
-      .createReadStream(getFilePath(filename))
-      .pipe(CSVParser(fileOptions))
+    const accountsFromFile = fileSystem.createReadStream(getFilePath(filename))
+    CSVParserStream(accountsFromFile, { headers: true })
       .on('error', (error: Error) => reject(error))
       .on('data', (account: Account) => accounts.push(account))
-      .on('end', () => { resolve(accounts) }) */
+      .on('end', () => resolve(accounts))
   })
 }
 
@@ -42,7 +29,7 @@ function getCategories(): Promise<Category[]> {
   return new Promise((resolve, reject) => {
     const categoriesFromFile = fileSystem.createReadStream(getFilePath(filename))
     CSVParserStream(categoriesFromFile, { headers: true })
-      .on('error', (error: Error) => { reject(error) })
+      .on('error', (error: Error) => reject(error))
       .on('data', (category: Category) => { categories.push(category) })
       .on('end', () => resolve(categories))
   })
@@ -71,10 +58,14 @@ function getTransactions(): Promise<Transaction[]> {
 }
 
 async function main() {
-  /* const accounts = await getAccounts() */
-  /* const categories = await getCategories() */
-  const transactions = await getTransactions()
-  console.log(transactions)
+  /* const accounts = await getAccounts()
+  console.log(accounts) */
+
+  /* const categories = await getCategories()
+  console.log(categories) */
+
+  /* const transactions = await getTransactions()
+  console.log(transactions) */
 
   /* await prisma.account.deleteMany()
   await prisma.account.createMany({ data: accounts }) */
