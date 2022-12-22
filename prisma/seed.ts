@@ -30,7 +30,7 @@ function getCategories(): Promise<Category[]> {
     const categoriesFromFile = fileSystem.createReadStream(getFilePath(filename))
     CSVParserStream(categoriesFromFile, { headers: true })
       .on('error', (error: Error) => reject(error))
-      .on('data', (category: Category) => { categories.push(category) })
+      .on('data', (category: Category) => categories.push(category))
       .on('end', () => resolve(categories))
   })
 }
