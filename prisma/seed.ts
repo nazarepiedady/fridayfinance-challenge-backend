@@ -62,13 +62,12 @@ async function main() {
   const categories: Category[] = await getCategories()
   const transactions: Transaction[] = await getTransactions()
 
-  await prisma.account.deleteMany()
-  await prisma.account.createMany({ data: accounts })
-
-  await prisma.category.deleteMany()
-  await prisma.category.createMany({ data: categories })
-
   await prisma.transaction.deleteMany()
+  await prisma.category.deleteMany()
+  await prisma.account.deleteMany()
+
+  await prisma.account.createMany({ data: accounts })
+  await prisma.category.createMany({ data: categories })
   await prisma.transaction.createMany({ data: transactions })
 }
 
