@@ -62,13 +62,23 @@ async function main() {
   const categories: Category[] = await getCategories()
   const transactions: Transaction[] = await getTransactions()
 
-  await prisma.transaction.deleteMany()
-  await prisma.category.deleteMany()
-  await prisma.account.deleteMany()
+  try {
+    await prisma.transaction.deleteMany()
+    await prisma.category.deleteMany()
+    await prisma.account.deleteMany()
+    console.log('Tables content deleted with success!')
+  } catch (error) {
+    console.log('Something went wrong while deleting the content of tables!', error)
+  }
 
-  await prisma.account.createMany({ data: accounts })
-  await prisma.category.createMany({ data: categories })
-  await prisma.transaction.createMany({ data: transactions })
+  try {
+    await prisma.account.createMany({ data: accounts })
+    await prisma.category.createMany({ data: categories })
+    await prisma.transaction.createMany({ data: transactions })
+    console.log('Tables seeded with success!')
+  } catch (error) {
+    console.log('Something went wrong while seeding with content the tables!', error)
+  }
 }
 
 main()
