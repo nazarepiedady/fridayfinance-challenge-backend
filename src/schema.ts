@@ -1,5 +1,5 @@
-import { Context } from './context';
 import { gql } from 'apollo-server';
+import { Context } from './context';
 import { v4 as generateUniqueId } from 'uuid';
 
 
