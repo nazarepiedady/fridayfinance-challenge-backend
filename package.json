@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --no-notify --respawn --transpile-only src/server"
+    "dev": "ts-node-dev --no-notify --respawn --transpile-only src/server",
+    "start": "npx prisma db push && npx prisma db seed && npm run dev"
   },
   "keywords": [],
   "author": "",
